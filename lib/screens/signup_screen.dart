@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:instagram_clone/resources/auth_methods.dart';
 import 'package:instagram_clone/utils/colors.dart';
 import 'package:instagram_clone/widgets/text_field_input.dart';
+
+
 
 class Signupscreen extends StatefulWidget {
   const Signupscreen({super.key});
@@ -15,6 +18,7 @@ class _SignupscreenState extends State<Signupscreen> {
   final TextEditingController _passwordcontroller = TextEditingController();
   final TextEditingController _biocontroller = TextEditingController();
   final TextEditingController _usernamecontroller = TextEditingController();
+  AuthMethods authMethods = AuthMethods();
 
   @override
   void dispose() {
@@ -57,10 +61,10 @@ class _SignupscreenState extends State<Signupscreen> {
                 Positioned(
                   bottom: -10,
                   left: 80,
-                    child: IconButton(
-                  onPressed: () {},
-                  icon: const Icon(Icons.add_a_photo),
-                ),
+                  child: IconButton(
+                    onPressed: () {},
+                    icon: const Icon(Icons.add_a_photo),
+                  ),
                 ),
               ],
             ),
@@ -112,7 +116,14 @@ class _SignupscreenState extends State<Signupscreen> {
 
             //password text field
             //button Signup
-            InkWell(
+            InkWell(onTap: () async{
+              String res = await authMethods.signupUser(
+                        email: _emailcontroller.text,
+                        password: _passwordcontroller.text,
+                        username: _usernamecontroller.text,
+                        Bio: _biocontroller.text);
+                    print(res);
+            },
               child: Container(
                 child: Text('Log in'),
                 width: double.infinity,
@@ -141,7 +152,8 @@ class _SignupscreenState extends State<Signupscreen> {
                   padding: const EdgeInsets.symmetric(vertical: 8),
                 ),
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () async {
+                  },
                   child: Container(
                     child: const Text(
                       "Sign up!",
