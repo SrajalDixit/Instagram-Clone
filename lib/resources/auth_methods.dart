@@ -2,6 +2,9 @@ import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:instagram_clone/resources/storage_methods.dart';
+import 'package:instagram_clone/models/user.dart' as model;
+
 
 class AuthMethods {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -12,7 +15,7 @@ class AuthMethods {
     required String password,
     required String username,
     required String Bio,
-    //required Uint8List file,
+    required Uint8List file,
   }) async {
     String res = "Some error occurred";
     try {
@@ -28,15 +31,21 @@ class AuthMethods {
         );
 
         print(cred.user!.uid);
-       await _firestore.collection('users').doc(cred.user!.uid).set({
-          'username':username,
-          'uid':cred.user!.uid,
-          'email':email,
-          'bio':Bio,
-          'followers':[],
-          'following':[],
+        String photoUrl = await StorageMethods().uploadImageToStorage( 'profilePics', file, false);
+           
+        model.User user = model.User(
+          username: username,
+          uid : cred.user!.uid,
+          email:  email,
+          bio:  Bio,
+          photoUrl:  photoUrl,
+          following: [],
+          followers:  [],
+        );
+        
           
-        });
+
+       await _firestore.collection('users').doc(cred.user!.uid).set(user.toJson(),);
         res='success';
       }
     } catch (err) {
@@ -44,4 +53,28 @@ class AuthMethods {
     }
     return res;
   }
-}
+
+  Future<String> loginUser({required String email , required String password}) async
+  {
+     String res = "some error occurred";
+
+     try{
+      if(email.isNotEmpty || password.isNotEmpty)
+      {
+        await _auth.signInWithEmailAndPassword(email: email, password: password);
+        res = 'success';
+      }
+      else{
+        res = 'Please fill the required fieds';
+      }
+     
+     }
+      catch(err){
+        res = err.toString();
+      }
+      return res;
+  }
+  
+
+  }
+

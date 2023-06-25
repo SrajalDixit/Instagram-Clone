@@ -1,10 +1,17 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:instagram_clone/resources/auth_methods.dart';
+import 'package:instagram_clone/responsive/responsive_screen_layout.dart';
+import 'package:instagram_clone/screens/login_screen.dart';
 import 'package:instagram_clone/utils/colors.dart';
+import 'package:instagram_clone/utils/utils.dart';
 import 'package:instagram_clone/widgets/text_field_input.dart';
 
-
+import '../responsive/mobile_screen_layout.dart';
+import '../responsive/web_screen_layout.dart';
 
 class Signupscreen extends StatefulWidget {
   const Signupscreen({super.key});
@@ -18,6 +25,8 @@ class _SignupscreenState extends State<Signupscreen> {
   final TextEditingController _passwordcontroller = TextEditingController();
   final TextEditingController _biocontroller = TextEditingController();
   final TextEditingController _usernamecontroller = TextEditingController();
+  Uint8List? _image;
+  bool _isLoading = false;
   AuthMethods authMethods = AuthMethods();
 
   @override
@@ -28,6 +37,51 @@ class _SignupscreenState extends State<Signupscreen> {
     _passwordcontroller.dispose();
     _biocontroller.dispose();
     _usernamecontroller.dispose();
+  }
+
+  void navigateToLogin() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const Loginscreen(),
+      ),
+    );
+  }
+
+  void selectImage() async {
+    Uint8List im = await pickImage(ImageSource.gallery);
+
+    setState(() {
+      _image = im;
+    });
+  }
+
+  void signUpUser() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    String res = await authMethods.signupUser(
+        email: _emailcontroller.text,
+        password: _passwordcontroller.text,
+        username: _usernamecontroller.text,
+        Bio: _biocontroller.text,
+        file: _image!);
+
+    setState(() {
+      _isLoading = false;
+    });
+
+    if (res != 'success') {
+      showSnackBar(res, context);
+    } else {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => const ResponsiveLayout(
+              webScreenLayout: webScreenLayout(),
+              mobileScreenLayout: mobileScreenLayout()),
+        ),
+      );
+    }
   }
 
   @override
@@ -53,16 +107,19 @@ class _SignupscreenState extends State<Signupscreen> {
 
             Stack(
               children: [
-                const CircleAvatar(
-                  radius: 64,
-                  backgroundImage: NetworkImage(
-                      'https://images.unsplash.com/photo-1685884852440-b7e379c82c9c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyOHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=60'),
-                ),
+                _image != null
+                    ? CircleAvatar(
+                        radius: 64, backgroundImage: MemoryImage(_image!))
+                    : const CircleAvatar(
+                        radius: 64,
+                        backgroundImage: NetworkImage(
+                            'https://i.pinimg.com/originals/f1/0f/f7/f10ff70a7155e5ab666bcdd1b45b726d.jpg'),
+                      ),
                 Positioned(
                   bottom: -10,
                   left: 80,
                   child: IconButton(
-                    onPressed: () {},
+                    onPressed: selectImage,
                     icon: const Icon(Icons.add_a_photo),
                   ),
                 ),
@@ -116,16 +173,16 @@ class _SignupscreenState extends State<Signupscreen> {
 
             //password text field
             //button Signup
-            InkWell(onTap: () async{
-              String res = await authMethods.signupUser(
-                        email: _emailcontroller.text,
-                        password: _passwordcontroller.text,
-                        username: _usernamecontroller.text,
-                        Bio: _biocontroller.text);
-                    print(res);
-            },
+            InkWell(
+              onTap: signUpUser,
               child: Container(
-                child: Text('Log in'),
+                child: _isLoading
+                    ? Center(
+                        child: const CircularProgressIndicator(
+                          color: primaryColor,
+                        ),
+                      )
+                    : const Text('Sign up'),
                 width: double.infinity,
                 alignment: Alignment.center,
                 padding: const EdgeInsets.symmetric(vertical: 12),
@@ -148,15 +205,14 @@ class _SignupscreenState extends State<Signupscreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-                  child: const Text("Don't have an account?"),
+                  child: const Text("Already have an account?"),
                   padding: const EdgeInsets.symmetric(vertical: 8),
                 ),
                 GestureDetector(
-                  onTap: () async {
-                  },
+                  onTap: navigateToLogin,
                   child: Container(
                     child: const Text(
-                      "Sign up!",
+                      "Log in!",
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                     padding: const EdgeInsets.symmetric(vertical: 8),
