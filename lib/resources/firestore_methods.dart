@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:instagram_clone/models/post.dart';
 import 'package:instagram_clone/resources/storage_methods.dart';
 import 'package:uuid/uuid.dart';
@@ -47,13 +48,10 @@ class FirestoreMethods {
         await _firestore.collection('posts').doc(postId).update({
           'likes': FieldValue.arrayRemove([uid]),
         });
-      }
-
-      else{
-       await _firestore.collection('posts').doc(postId).update({
+      } else {
+        await _firestore.collection('posts').doc(postId).update({
           'likes': FieldValue.arrayUnion([uid]),
         });
-
       }
     } catch (e) {
       print(
@@ -62,28 +60,39 @@ class FirestoreMethods {
     }
   }
 
-  Future<void> postComment(String postId,String text,String uid
-  ,String name,String profilePic) async{
-    try{
-      if(text.isNotEmpty) {
+  Future<void> postComment(String postId, String text, String uid, String name,
+      String profilePic) async {
+    try {
+      if (text.isNotEmpty) {
         String commentID = const Uuid().v1();
-       await _firestore.collection('posts').doc(postId).collection('comments').doc(commentID).set({
-            'profilePic': profilePic,
-            'name' :name,
-            'uid' : uid,
-            'text' : text,
-            'commentID' : commentID,
-            'datePublished': DateTime.now()
+        await _firestore
+            .collection('posts')
+            .doc(postId)
+            .collection('comments')
+            .doc(commentID)
+            .set({
+          'profilePic': profilePic,
+          'name': name,
+          'uid': uid,
+          'text': text,
+          'commentID': commentID,
+          'datePublished': DateTime.now()
         });
-      }else{
+      } else {
         print('text is empty');
       }
-    }
-    catch(e)
-    {
+    } catch (e) {
       print(
         e.toString(),
       );
+    }
+  }
+
+  Future<void> deletePost(String postId) async {
+    try {
+      await _firestore.collection('posts').doc(postId).delete();
+    } catch (e) {
+      print(e.toString());
     }
   }
 }

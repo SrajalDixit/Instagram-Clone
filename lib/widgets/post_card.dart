@@ -21,12 +21,9 @@ class PostCard extends StatefulWidget {
 class _PostCardState extends State<PostCard> {
   bool isLikeAnimating = false;
   int commentLen = 0;
+
+ 
   
-  @override
-  void initState() {
-    super.initState();
-    getComments();
-  }
 
   void getComments() async {
     try {
@@ -40,6 +37,15 @@ class _PostCardState extends State<PostCard> {
     } catch (e) {
       showSnackBar(e.toString(), context);
     }
+    setState(() {
+      
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getComments();
   }
 
   @override
@@ -86,7 +92,10 @@ class _PostCardState extends State<PostCard> {
                                   shrinkWrap: true,
                                   children: ['Delete', 'Report', 'Help']
                                       .map((e) => InkWell(
-                                            onTap: () {},
+                                            onTap: () async{
+                                              FirestoreMethods().deletePost(widget.snap['postId']);
+                                              Navigator.of(context).pop();
+                                            },
                                             child: Container(
                                               padding:
                                                   const EdgeInsets.symmetric(
