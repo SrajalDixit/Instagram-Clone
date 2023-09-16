@@ -15,6 +15,7 @@ A completely Responsive Instagram App- Works on Android, iOS & Web!
 * Sign Out
 
 ## Screenshots
+![My Image](C:\Users\srajal\Desktop\Screenshot_1694856268.png)
 
 
 
