@@ -27,5 +27,9 @@ A completely Responsive Instagram App- Works on Android, iOS & Web!
 ### Search Users
 <img src="https://github.com/SrajalDixit/Instagram-Clone/blob/main/Screenshot_1694856137.png" alt="My Image" width="270" height="585">
 
+## Tech Used
+* Server : Firebase Auth, Firebase Storage, Firebase Firestore
+* Client : Flutter, Provider
+
 
 
