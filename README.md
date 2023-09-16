@@ -15,7 +15,7 @@ A completely Responsive Instagram App- Works on Android, iOS & Web!
 * Sign Out
 
 ## Screenshots
-![My Image](https://drive.google.com/file/d/1lRgE1KkZfuJLgrBNoY8DuLWDhOswk1ag/view?usp=drive_link)
+![My Image](https://github.com/SrajalDixit/Instagram-Clone/blob/main/Screenshot_1694856090.png)
 ![My Image](C:\Users\srajal\Desktop\Screenshot_1694856137.png)
 
 
