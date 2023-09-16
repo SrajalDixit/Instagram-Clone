@@ -16,6 +16,7 @@ A completely Responsive Instagram App- Works on Android, iOS & Web!
 
 ## Screenshots
 ![My Image](C:\Users\srajal\Desktop\Screenshot_1694856268.png)
+![My Image](C:\Users\srajal\Desktop\Screenshot_1694856137.png)
 
 
 
