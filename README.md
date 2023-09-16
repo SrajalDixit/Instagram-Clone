@@ -15,7 +15,7 @@ A completely Responsive Instagram App- Works on Android, iOS & Web!
 * Sign Out
 
 ## Screenshots
-<img src="https://github.com/SrajalDixit/Instagram-Clone/blob/main/Screenshot_1694856090.png" alt="My Image" width="90" height="195">
+<img src="https://github.com/SrajalDixit/Instagram-Clone/blob/main/Screenshot_1694856090.png" alt="My Image" width="135" height="292.5">
 
 ![My Image](C:\Users\srajal\Desktop\Screenshot_1694856137.png)
 
